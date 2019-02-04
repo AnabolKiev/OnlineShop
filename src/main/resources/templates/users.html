@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+<body>
+    <a href="users/add">Add new user</a>
+	<table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Firstname</th>
+                <th scope="col">Lastname</th>
+                <th scope="col">Salary</th>
+                <th scope="col">Date of birth</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <#list users as user>
+		    <tr>
+			    <td>${user.id}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.salary}</td>
+                <td>${user.dateOfBirth}</td>
+                <td>
+                    <form action="/users/edit" method="GET">
+                        <input type="hidden" name="id" value="${user.id}">
+                        <input type="submit" class="btn btn-dark" value="Edit">
+                    </form>
+                </td>
+                <td>
+                    <form action="/users/remove" method="POST">
+                        <input type="hidden" name="id" value="${user.id}">
+                        <input type="submit" class="btn btn-dark" value="Remove">
+                    </form>
+                </td>
+		    </tr>
+        </#list>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Add user</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1 align="center">Edit user</h1>
+        <form action="/users/edit" method="POST">
+            <div class="form-group">
+                <input type="hidden" name="id" value="${user.id}"/>
+                <label for="inputFirstName">First name</label>
+                <input type="text" class="form-control" id="inputFirstName" required name="firstName" value="${user.firstName}">
+                <label for="inputLastName">Last name</label>
+                <input type="text" class="form-control" id="inputLastName" required name="lastName"value="${user.lastName}">
+                <label for="inputSalary">Salary</label>
+                <input type="number" class="form-control" id="inputSalary" step=".01" min="0" value="${user.salary}" name="salary">
+                <label for="inputDateOfBirth">Date of birth</label>
+                <input type="date" class="form-control" id="inputDateOfBirth" value="${user.dateOfBirth}" name="dateOfBirth">
+                <br>
+                <input type="submit" class="btn btn-dark" value="Save">
+            </div>
+        </form>
+    </body>
+</html>
+

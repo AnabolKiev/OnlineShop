@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Add user</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1 align="center">Add new user</h1>
+        <form action="/users/add" method="POST">
+            <div class="form-group">
+                <label for="inputFirstName">First name</label>
+                <input type="text" class="form-control" id="inputFirstName" required name="firstName">
+                <label for="inputLastName">Last name</label>
+                <input type="text" class="form-control" id="inputLastName" required name="lastName">
+                <label for="inputSalary">Salary</label>
+                <input type="number" class="form-control" id="inputSalary" step=".01" min="0" value="0" name="salary">
+                <label for="inputDateOfBirth">Date of birth</label>
+                <input type="date" class="form-control" id="inputDateOfBirth" required name="dateOfBirth">
+                <br>
+                <input type="submit" class="btn btn-dark" value="Add">
+            </div>
+        </form>
+    </body>
+</html>
+
