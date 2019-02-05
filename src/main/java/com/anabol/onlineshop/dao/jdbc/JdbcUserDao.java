@@ -1,6 +1,7 @@
 package com.anabol.onlineshop.dao.jdbc;
 
 import com.anabol.onlineshop.dao.UserDao;
+import com.anabol.onlineshop.dao.jdbc.connection.DBConnection;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.dao.jdbc.mapper.UserMapper;
 
@@ -9,17 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao implements UserDao {
-    private static final String JDBC_CONNECTION = "jdbc:sqlite:test.db";
+    private DBConnection dbConnection;
 
     private static final String FIND_ALL_QUERY = "SELECT id, firstName, lastName, salary, dateOfBirth FROM user";
+
     private static final String FIND_BY_ID_QUERY = "SELECT id, firstName, lastName, salary, dateOfBirth FROM user WHERE id = ?";
     private static final String INSERT_QUERY = "INSERT INTO user (firstName, lastName, salary, dateOfBirth) VALUES (?, ?, ?, ?)";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM user WHERE id = ?";
     private static final String UPDATE_QUERY = "UPDATE user SET firstName = ?, lastName = ?, salary = ?, dateOfBirth = ? WHERE id = ?";
-
     @Override
     public List<User> findAll() {
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(FIND_ALL_QUERY)) {
             List<User> list = new ArrayList<>();
@@ -35,11 +36,12 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User findById(int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return UserMapper.mapRow(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return UserMapper.mapRow(resultSet);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("We got SQLException", e);
@@ -48,7 +50,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void insert(User user) {
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
             setStatementAttributes(preparedStatement, user);
             preparedStatement.executeUpdate();
@@ -60,7 +62,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -72,7 +74,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void update(User user) {
-        try (Connection connection = getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             setStatementAttributes(preparedStatement, user);
             preparedStatement.setInt(5, user.getId());
@@ -90,7 +92,7 @@ public class JdbcUserDao implements UserDao {
         preparedStatement.setString(4, user.getDateOfBirth().toString());
     }
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(JDBC_CONNECTION);
+    public JdbcUserDao(DBConnection dbConnection) {
+        this.dbConnection = dbConnection;
     }
 }

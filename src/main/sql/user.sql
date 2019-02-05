@@ -1,14 +1,27 @@
-DROP TABLE IF EXISTS user;
+CREATE SCHEMA `onlinestore` ;
 
-CREATE TABLE user (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  firstName TEXT,
-  lastName TEXT,
-  salary REAL,
-  dateOfBirth TEXT
+DROP TABLE IF EXISTS onlinestore.user;
+
+CREATE TABLE onlinestore.user (
+  name VARCHAR(30) PRIMARY KEY,
+  password VARCHAR(30),
+  role VARCHAR(20)
 );
 
-INSERT INTO user (firstName, lastName, salary, dateOfBirth) VALUES ('Donald', 'Trump', 1000.00, '1965-07-29');
-INSERT INTO user (firstName, lastName, salary, dateOfBirth) VALUES ('Vladimir', 'Putin', 799.99, '1955-08-30');
+INSERT INTO onlinestore.user (name, password, role) VALUES ('Anabol', '12345', 'ADMIN');
 
-SELECT * FROM user;
+
+
+DROP TABLE IF EXISTS onlinestore.product;
+
+CREATE TABLE onlinestore.product (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(30),
+  description VARCHAR(250),
+  price DOUBLE
+);
+
+INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone 4', 'Vintage smarthone from Apple', 200.00);
+INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone X', 'The newest smarthone from Apple', 999.99);
+
+SELECT * FROM onlinestore.product;

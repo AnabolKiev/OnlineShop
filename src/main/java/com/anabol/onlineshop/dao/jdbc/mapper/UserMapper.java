@@ -10,8 +10,6 @@ import java.util.Locale;
 
 public class UserMapper {
     public static User mapRow(ResultSet resultSet) throws SQLException {
-        //User user = new User();
-//        if (!resultSet.isClosed()) {
             User user = new User();
             user.setId(resultSet.getInt("id"));
             user.setFirstName(resultSet.getString("firstName"));
@@ -21,16 +19,5 @@ public class UserMapper {
             LocalDate dateOfBirth = LocalDate.parse(resultSet.getString("dateOfBirth"), dateTimeFormatter);
             user.setDateOfBirth(dateOfBirth);
             return user;
-  //      }
-//        return null;
     }
-
-//    public static List<User> parseList(ResultSet resultSet) throws SQLException {
-//        List<User> users = new ArrayList<>();
-//        while (resultSet.next()) {
-//            User user = parse(resultSet);
-//            users.add(user);
-//        }
-//        return users;
-//    }
 }
