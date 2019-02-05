@@ -2,9 +2,10 @@ package com.anabol.onlineshop.dao.jdbc;
 
 import com.anabol.onlineshop.dao.UserDao;
 import com.anabol.onlineshop.entity.User;
-import com.anabol.onlineshop.dao.jdbc.mapper.Mapper;
+import com.anabol.onlineshop.dao.jdbc.mapper.UserMapper;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao implements UserDao {
@@ -21,7 +22,11 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(FIND_ALL_QUERY)) {
-            return Mapper.parseList(resultSet);
+            List<User> list = new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(UserMapper.mapRow(resultSet));
+            }
+            return list;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("We got SQLException", e);
@@ -34,7 +39,7 @@ public class JdbcUserDao implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            return Mapper.parse(resultSet);
+            return UserMapper.mapRow(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("We got SQLException", e);

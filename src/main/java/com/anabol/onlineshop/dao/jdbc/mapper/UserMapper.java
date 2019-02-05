@@ -6,14 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-public class Mapper {
-    public static User parse(ResultSet resultSet) throws SQLException {
+public class UserMapper {
+    public static User mapRow(ResultSet resultSet) throws SQLException {
         //User user = new User();
-        if (!resultSet.isClosed()) {
+//        if (!resultSet.isClosed()) {
             User user = new User();
             user.setId(resultSet.getInt("id"));
             user.setFirstName(resultSet.getString("firstName"));
@@ -23,16 +21,16 @@ public class Mapper {
             LocalDate dateOfBirth = LocalDate.parse(resultSet.getString("dateOfBirth"), dateTimeFormatter);
             user.setDateOfBirth(dateOfBirth);
             return user;
-        }
-        return null;
+  //      }
+//        return null;
     }
 
-    public static List<User> parseList(ResultSet resultSet) throws SQLException {
-        List<User> users = new ArrayList<>();
-        while (resultSet.next()) {
-            User user = parse(resultSet);
-            users.add(user);
-        }
-        return users;
-    }
+//    public static List<User> parseList(ResultSet resultSet) throws SQLException {
+//        List<User> users = new ArrayList<>();
+//        while (resultSet.next()) {
+//            User user = parse(resultSet);
+//            users.add(user);
+//        }
+//        return users;
+//    }
 }
