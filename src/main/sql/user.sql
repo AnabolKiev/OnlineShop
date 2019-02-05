@@ -9,6 +9,10 @@ CREATE TABLE onlinestore.user (
 );
 
 INSERT INTO onlinestore.user (name, password, role) VALUES ('Anabol', '12345', 'ADMIN');
+commit;
+
+select * from user;
+
 
 
 
@@ -23,5 +27,6 @@ CREATE TABLE onlinestore.product (
 
 INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone 4', 'Vintage smarthone from Apple', 200.00);
 INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone X', 'The newest smarthone from Apple', 999.99);
+commit;
 
 SELECT * FROM onlinestore.product;

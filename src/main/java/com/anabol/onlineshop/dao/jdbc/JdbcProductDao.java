@@ -14,10 +14,10 @@ public class JdbcProductDao implements ProductDao {
 
     private static final String FIND_ALL_QUERY = "SELECT id, name, description, price FROM product";
 
-    private static final String FIND_BY_ID_QUERY = "SELECT id, firstName, lastName, salary, dateOfBirth FROM user WHERE id = ?";
-    private static final String INSERT_QUERY = "INSERT INTO user (firstName, lastName, salary, dateOfBirth) VALUES (?, ?, ?, ?)";
-    private static final String DELETE_BY_ID_QUERY = "DELETE FROM user WHERE id = ?";
-    private static final String UPDATE_QUERY = "UPDATE user SET firstName = ?, lastName = ?, salary = ?, dateOfBirth = ? WHERE id = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT id, name, description, price FROM product WHERE id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO product (name, description, price) VALUES (?, ?, ?)";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?";
 
     @Override
     public List<Product> findAll() {
@@ -41,7 +41,11 @@ public class JdbcProductDao implements ProductDao {
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return ProductMapper.mapRow(resultSet);
+                Product product = new Product();
+                while(resultSet.next()) {
+                    product = ProductMapper.mapRow(resultSet);
+                }
+                return product;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,10 +54,10 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public void insert(Product user) {
+    public void insert(Product product) {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
-            setStatementAttributes(preparedStatement, user);
+            setStatementAttributes(preparedStatement, product);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,11 +78,11 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public void update(Product user) {
+    public void update(Product product) {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
-            setStatementAttributes(preparedStatement, user);
-            preparedStatement.setInt(5, user.getId());
+            setStatementAttributes(preparedStatement, product);
+            preparedStatement.setInt(4, product.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

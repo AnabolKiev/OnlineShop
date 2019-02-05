@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Products</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+    <a href="users/add">Add new user</a>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list products as product>
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.description}</td>
+                    <td>${product.price}</td>
+                </tr>
+            </#list>
+            </tbody>
+        </table>
+    </body>
+</html>

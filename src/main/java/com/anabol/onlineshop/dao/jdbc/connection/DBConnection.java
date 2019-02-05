@@ -18,11 +18,11 @@ public class DBConnection {
     }
 
     public Connection getConnection() throws SQLException {
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class.forName(driver);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
         return DriverManager.getConnection(url, username, password);
     }
 }

@@ -1,51 +1,32 @@
 package com.anabol.onlineshop.entity;
 
-import java.time.LocalDate;
 
 public class User {
-    private int id;
-    private String firstName;
-    private String lastName;
-    private Double salary;
-    private LocalDate dateOfBirth;
+    private String name;
+    private String password;
+    private String role;
 
-    public int getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getRole() {
+        return role;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
