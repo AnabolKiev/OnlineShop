@@ -27,14 +27,13 @@ public class Main {
         // configuration
         // connection properties
         Properties jdbcProperties = new Properties();
-        try (FileInputStream in = new FileInputStream("src/main/jdbc.properties")) {
+        try (FileInputStream in = new FileInputStream("src/main/resources/jdbc.properties")) {
             jdbcProperties.load(in);
         }
-        String driver = jdbcProperties.getProperty("jdbc.driver");
         String url = jdbcProperties.getProperty("jdbc.url");
         String username = jdbcProperties.getProperty("jdbc.username");
         String password = jdbcProperties.getProperty("jdbc.password");
-        DBConnection dbConnection = new DBConnection(driver, url, username, password);
+        DBConnection dbConnection = new DBConnection(url, username, password);
 
         List<String> tokens = new ArrayList<>();
 
