@@ -1,4 +1,4 @@
-package com.anabol.onlineshop.web.servlets;
+package com.anabol.onlineshop.web.servlets.product;
 
 import com.anabol.onlineshop.service.ProductService;
 import com.anabol.onlineshop.web.templater.PageGenerator;

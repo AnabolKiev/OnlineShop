@@ -1,11 +1,11 @@
-package com.anabol.onlineshop.web.servlets;
+package com.anabol.onlineshop.web.servlets.product;
 
 import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.service.ProductService;
+import com.anabol.onlineshop.web.auth.TokenUtils;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,19 +18,7 @@ public class AddProductServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
-        boolean isAuth = false;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
-                    if (tokens.contains(cookie.getValue())) {
-                        isAuth = true;
-                    }
-                }
-            }
-        }
-
-        if (!isAuth) {
+        if (!TokenUtils.isTokenValid(request, tokens)) {
             response.sendRedirect("/login");
         } else {
             response.setContentType("text/html;charset=utf-8");
@@ -41,19 +29,7 @@ public class AddProductServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
-        boolean isAuth = false;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
-                    if (tokens.contains(cookie.getValue())) {
-                        isAuth = true;
-                    }
-                }
-            }
-        }
-
-        if (!isAuth) {
+        if (!TokenUtils.isTokenValid(request, tokens)) {
             response.sendRedirect("/login");
         } else {
             Product product = new Product();

@@ -8,6 +8,10 @@ import com.anabol.onlineshop.dao.jdbc.connection.DBConnection;
 import com.anabol.onlineshop.service.impl.DefaultProductService;
 import com.anabol.onlineshop.service.impl.DefaultUserService;
 import com.anabol.onlineshop.web.servlets.*;
+import com.anabol.onlineshop.web.servlets.product.AddProductServlet;
+import com.anabol.onlineshop.web.servlets.product.DeleteProductServlet;
+import com.anabol.onlineshop.web.servlets.product.EditProductServlet;
+import com.anabol.onlineshop.web.servlets.product.ShowProductServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -47,9 +51,10 @@ public class Main {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new ShowProductServlet(productService)), "/products");
         context.addServlet(new ServletHolder(new AddProductServlet(productService, tokens)), "/product/add");
-//        context.addServlet(new ServletHolder(new editProductServlet(productService, tokens)), "/product/edit/*");
-//        context.addServlet(new ServletHolder(new deleteProductServlet(productService, tokens)), "/product/delete/*");
+        context.addServlet(new ServletHolder(new EditProductServlet(productService, tokens)), "/product/edit/*");
+        context.addServlet(new ServletHolder(new DeleteProductServlet(productService, tokens)), "/product/delete/*");
         context.addServlet(new ServletHolder(new LoginServlet(userService, tokens)), "/login");
+        context.addServlet(new ServletHolder(new LogoutServlet(tokens)), "/logout");
 
         Server server = new Server(8080);
         server.setHandler(context);

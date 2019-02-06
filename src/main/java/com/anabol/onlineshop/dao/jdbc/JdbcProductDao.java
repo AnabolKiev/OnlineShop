@@ -41,8 +41,8 @@ public class JdbcProductDao implements ProductDao {
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                Product product = new Product();
-                while(resultSet.next()) {
+                Product product = null;
+                if (resultSet.next()) {
                     product = ProductMapper.mapRow(resultSet);
                 }
                 return product;
