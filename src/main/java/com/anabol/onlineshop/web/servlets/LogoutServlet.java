@@ -1,8 +1,6 @@
 package com.anabol.onlineshop.web.servlets;
 
-import com.anabol.onlineshop.web.auth.TokenUtils;
-
-import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +15,15 @@ public class LogoutServlet extends HttpServlet {
     List<String> tokens;
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
-        TokenUtils.logout(request, tokens);
+                      HttpServletResponse response) throws IOException {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("user-token")) {
+                    tokens.remove(cookie.getValue());
+                }
+            }
+        }
         response.sendRedirect("/login");
     }
 }

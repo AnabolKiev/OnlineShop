@@ -3,7 +3,6 @@ package com.anabol.onlineshop.web.servlets.product;
 import com.anabol.onlineshop.service.ProductService;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +14,7 @@ public class ShowProductServlet extends HttpServlet {
     private ProductService productService;
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
+                      HttpServletResponse response) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("products", productService.findAll());
         response.setContentType("text/html;charset=utf-8");
