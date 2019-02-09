@@ -1,18 +1,17 @@
 package com.anabol.onlineshop.dao.jdbc;
 
 import com.anabol.onlineshop.dao.UserDao;
-import com.anabol.onlineshop.dao.jdbc.connection.DBConnection;
+import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.dao.jdbc.mapper.UserMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JdbcUserDao implements UserDao {
-    private DBConnection dbConnection;
-
+    private static final UserMapper USER_MAPPER = new UserMapper();
     private static final String FIND_BY_NAME_QUERY = "SELECT name, password, role FROM user WHERE name = ?";
+
+    private DBConnectionFactory dbConnection;
 
     @Override
     public User getByName(String name) {
@@ -20,9 +19,9 @@ public class JdbcUserDao implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY)) {
             preparedStatement.setString(1, name);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                User user = new User();
+                User user = null;
                 if (resultSet.next()) {
-                    user = UserMapper.mapRow(resultSet);
+                    user = USER_MAPPER.mapRow(resultSet);
                 }
                 return user;
             }
@@ -32,7 +31,7 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    public JdbcUserDao(DBConnection dbConnection) {
+    public JdbcUserDao(DBConnectionFactory dbConnection) {
         this.dbConnection = dbConnection;
     }
 }

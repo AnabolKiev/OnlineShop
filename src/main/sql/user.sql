@@ -25,8 +25,8 @@ CREATE TABLE onlinestore.product (
   price DOUBLE
 );
 
-INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone 4', 'Vintage smarthone from Apple', 200.00);
-INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone X', 'The newest smarthone from Apple', 999.99);
+INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone 4', 'Vintage smartphone from Apple', 200.00);
+INSERT INTO onlinestore.product (name, description, price) VALUES ('Iphone X', 'The newest smartphone from Apple', 999.99);
 commit;
 
 SELECT * FROM onlinestore.product;
