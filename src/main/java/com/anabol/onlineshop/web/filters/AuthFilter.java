@@ -32,9 +32,9 @@ public class AuthFilter implements Filter {
         boolean isAuth = false;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
+                if ("user-token".equals(cookie.getName())) {
                     Session session = securityService.findByToken(cookie.getValue());
-                    if (session != null && session.getExpireDate().isAfter(LocalDateTime.now())) {
+                    if (session != null) {
                         isAuth = true;
                     }
                     break;

@@ -5,6 +5,7 @@ import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.dao.jdbc.mapper.ProductMapper;
 import com.anabol.onlineshop.entity.Product;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,17 @@ public class JdbcProductDao implements ProductDao {
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
     private static final String UPDATE_QUERY = "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?";
 
-    private DBConnectionFactory dbConnectionFactory;
+    private DataSource dataSource;
+
+    public JdbcProductDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public List<Product> findAll() {
-        try (Connection connection = dbConnectionFactory.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(FIND_ALL_QUERY)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_QUERY);
+             ResultSet resultSet = preparedStatement.executeQuery(FIND_ALL_QUERY)) {
 
             List<Product> list = new ArrayList<>();
             while (resultSet.next()) {
@@ -40,7 +45,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public Product findById(int id) {
-        try (Connection connection = dbConnectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
 
             preparedStatement.setInt(1, id);
@@ -60,7 +65,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void insert(Product product) {
-        try (Connection connection = dbConnectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
 
             setProductStatementAttributes(preparedStatement, product);
@@ -74,7 +79,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void deleteById(int id) {
-        try (Connection connection = dbConnectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_QUERY)) {
 
             preparedStatement.setInt(1, id);
@@ -88,7 +93,7 @@ public class JdbcProductDao implements ProductDao {
 
     @Override
     public void update(Product product) {
-        try (Connection connection = dbConnectionFactory.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
 
             setProductStatementAttributes(preparedStatement, product);
@@ -105,9 +110,5 @@ public class JdbcProductDao implements ProductDao {
         preparedStatement.setString(1, product.getName());
         preparedStatement.setString(2, product.getDescription());
         preparedStatement.setDouble(3, product.getPrice());
-    }
-
-    public JdbcProductDao(DBConnectionFactory dbConnectionFactory) {
-        this.dbConnectionFactory = dbConnectionFactory;
     }
 }

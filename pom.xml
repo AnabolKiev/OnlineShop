@@ -23,11 +23,14 @@
     </build>
 
     <dependencies>
+         <!--DB-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.15</version>
         </dependency>
+
+         <!--Web-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -43,6 +46,8 @@
             <artifactId>jetty-webapp</artifactId>
             <version>9.4.14.v20181114</version>
         </dependency>
+
+         <!--Testing-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

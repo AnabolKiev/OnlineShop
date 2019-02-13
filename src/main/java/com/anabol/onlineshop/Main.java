@@ -4,7 +4,6 @@ import com.anabol.onlineshop.dao.ProductDao;
 import com.anabol.onlineshop.dao.UserDao;
 import com.anabol.onlineshop.dao.jdbc.JdbcProductDao;
 import com.anabol.onlineshop.dao.jdbc.JdbcUserDao;
-import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.service.impl.DefaultProductService;
 import com.anabol.onlineshop.service.impl.DefaultSecurityService;
 import com.anabol.onlineshop.service.impl.DefaultUserService;
@@ -14,12 +13,14 @@ import com.anabol.onlineshop.web.servlets.product.AddProductServlet;
 import com.anabol.onlineshop.web.servlets.product.DeleteProductServlet;
 import com.anabol.onlineshop.web.servlets.product.EditProductServlet;
 import com.anabol.onlineshop.web.servlets.product.ShowProductServlet;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.DispatcherType;
+import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.util.*;
 
@@ -33,14 +34,12 @@ public class Main {
         try (FileInputStream in = new FileInputStream("src/main/resources/jdbc.properties")) {
             jdbcProperties.load(in);
         }
-        String url = jdbcProperties.getProperty("jdbc.url");
-        String username = jdbcProperties.getProperty("jdbc.username");
-        String password = jdbcProperties.getProperty("jdbc.password");
-        DBConnectionFactory dbConnectionFactory = new DBConnectionFactory(url, username, password);
+
+        DataSource dataSource = createDataSource(jdbcProperties);
 
         // Wiring dao
-        UserDao userDao = new JdbcUserDao(dbConnectionFactory);
-        ProductDao productDao = new JdbcProductDao(dbConnectionFactory);
+        UserDao userDao = new JdbcUserDao(dataSource);
+        ProductDao productDao = new JdbcProductDao(dataSource);
 
         // Wiring services
         DefaultUserService userService = new DefaultUserService();
@@ -67,5 +66,13 @@ public class Main {
         Server server = new Server(8080);
         server.setHandler(context);
         server.start();
+    }
+
+    private static DataSource createDataSource(Properties properties) {
+        MysqlConnectionPoolDataSource dataSource = new MysqlConnectionPoolDataSource();
+        dataSource.setUrl(properties.getProperty("jdbc.url"));
+        dataSource.setUser(properties.getProperty("jdbc.username"));
+        dataSource.setPassword(properties.getProperty("jdbc.password"));
+        return dataSource;
     }
 }

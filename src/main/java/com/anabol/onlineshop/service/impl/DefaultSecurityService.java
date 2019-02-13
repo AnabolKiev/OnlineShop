@@ -42,6 +42,10 @@ public class DefaultSecurityService implements SecurityService {
     public Session findByToken(String token) {
         for (Session session : sessions) {
             if (session.getToken().equals(token)) {
+                if (session.getExpireDate().isBefore(LocalDateTime.now())) {
+                    sessions.remove(session);
+                    return null;
+                }
                 return session;
             }
         }
@@ -56,11 +60,11 @@ public class DefaultSecurityService implements SecurityService {
         }
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    public UserService getUserService() {
+        return userService;
     }
 }
