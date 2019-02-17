@@ -53,8 +53,9 @@ public class Main {
 
         // servlets mapping
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new ShowProductServlet(productService)), "/");
-        context.addServlet(new ServletHolder(new ShowProductServlet(productService)), "/products");
+        ServletHolder productsServletHolder = new ServletHolder(new ShowProductServlet(productService, securityService));
+        context.addServlet(productsServletHolder, "/");
+        context.addServlet(productsServletHolder, "/products");
         context.addServlet(new ServletHolder(new AddProductServlet(productService)), "/product/add");
         context.addServlet(new ServletHolder(new EditProductServlet(productService)), "/product/edit/*");
         context.addServlet(new ServletHolder(new DeleteProductServlet(productService)), "/product/delete/*");
@@ -62,10 +63,10 @@ public class Main {
         context.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
         context.addServlet(new ServletHolder(new RegistrationServlet(securityService)), "/registration");
 
-        context.addFilter(new FilterHolder(new UserRoleFilter(securityService)), "/",
-                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-        context.addFilter(new FilterHolder(new UserRoleFilter(securityService)), "/products",
-                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        // filters
+        FilterHolder userFilterHolder = new FilterHolder(new UserRoleFilter(securityService));
+        context.addFilter(userFilterHolder, "/", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        context.addFilter(userFilterHolder, "/products", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
         context.addFilter(new FilterHolder(new AdminRoleFilter(securityService)), "/product/*",
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 

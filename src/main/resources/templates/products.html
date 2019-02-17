@@ -6,7 +6,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     </head>
     <body>
-    <a href="product/add">Add new product</a>
+        <#include "common/navbar.html">
+
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -14,7 +15,10 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
-                <th></th>
+                <#if isUserRoleAdmin>
+                    <th></th>
+                    <th></th>
+                </#if>
             </tr>
             </thead>
             <tbody>
@@ -24,16 +28,18 @@
                     <td>${product.name}</td>
                     <td>${product.description}</td>
                     <td>${product.price}</td>
-                    <td>
-                        <form action="/product/edit/${product.id}" method="GET">
-                            <input type="submit" class="btn btn-dark" value="Edit">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="/product/delete/${product.id}" method="GET">
-                            <input type="submit" class="btn btn-dark" value="Remove">
-                        </form>
-                    </td>
+                    <#if isUserRoleAdmin>
+                        <td>
+                            <form action="/product/edit/${product.id}" method="GET">
+                                <input type="submit" class="btn btn-dark" value="Edit">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/product/delete/${product.id}" method="GET">
+                                <input type="submit" class="btn btn-dark" value="Remove">
+                            </form>
+                        </td>
+                    </#if>
                 </tr>
             </#list>
             </tbody>

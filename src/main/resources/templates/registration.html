@@ -7,19 +7,23 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body>
-<h1 align="center">Registration of new user</h1>
-<div class="container">
-    <form action="/registration" method="POST">
-        <div class="form-group">
-            <label for="login">Login</label>
-            <input type="text" class="form-control" id="login" required name="login">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" required name="password">
-            <#if message??><div class="">${message}</div></#if>
-            <br>
-            <input type="submit" class="btn btn-dark" value="Register">
-        </div>
-    </form>
-</div>
+    <#include "common/navbar.html">
+
+    <h1 align="center">Registration of new user</h1>
+    <div class="container">
+        <form action="/registration" method="POST">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" required name="login">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" required name="password">
+                <#if message??>
+                    <div class="">${message}</div>
+                </#if>
+                <br>
+                <input type="submit" class="btn btn-dark" value="Register">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

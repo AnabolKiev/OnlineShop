@@ -7,19 +7,31 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body>
-<h1 align="center">Login</h1>
-<div class="container">
-    <form action="/login" method="POST">
-        <div class="form-group">
-            <label for="login">Login</label>
-            <input type="text" class="form-control" id="login" required name="login">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" required name="password">
-            <#if message??><div class="">${message}</div></#if>
-            <br>
-            <input type="submit" class="btn btn-dark" value="Login">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Online shop</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/registration">Registration<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
         </div>
-    </form>
-</div>
+    </nav>
+    <h1 align="center">Login</h1>
+    <div class="container">
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" required name="login">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" required name="password">
+                <#if message??>
+                    <div class="">${message}</div>
+                </#if>
+                <br>
+                <input type="submit" class="btn btn-dark" value="Login">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

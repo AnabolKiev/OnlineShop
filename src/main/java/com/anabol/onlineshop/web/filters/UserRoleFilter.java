@@ -1,6 +1,5 @@
 package com.anabol.onlineshop.web.filters;
 
-import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.web.auth.Session;
 
