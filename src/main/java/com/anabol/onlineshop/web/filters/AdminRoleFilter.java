@@ -1,5 +1,6 @@
 package com.anabol.onlineshop.web.filters;
 
+import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.web.auth.Session;
 
@@ -8,13 +9,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
-public class AuthFilter implements Filter {
+public class AdminRoleFilter implements Filter {
 
     private SecurityService securityService;
 
-    public AuthFilter(SecurityService securityService) {
+    public AdminRoleFilter(SecurityService securityService) {
         this.securityService = securityService;
     }
 
@@ -35,7 +35,9 @@ public class AuthFilter implements Filter {
                 if ("user-token".equals(cookie.getName())) {
                     Session session = securityService.findByToken(cookie.getValue());
                     if (session != null) {
-                        isAuth = true;
+                        if (UserRole.ADMIN == session.getUserRole()) {
+                            isAuth = true;
+                        }
                     }
                     break;
                 }

@@ -30,6 +30,13 @@
             <version>8.0.15</version>
         </dependency>
 
+        <!--Encoding-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
+
          <!--Web-->
         <dependency>
             <groupId>org.freemarker</groupId>

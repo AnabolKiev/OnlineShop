@@ -7,7 +7,8 @@ import com.anabol.onlineshop.dao.jdbc.JdbcUserDao;
 import com.anabol.onlineshop.service.impl.DefaultProductService;
 import com.anabol.onlineshop.service.impl.DefaultSecurityService;
 import com.anabol.onlineshop.service.impl.DefaultUserService;
-import com.anabol.onlineshop.web.filters.AuthFilter;
+import com.anabol.onlineshop.web.filters.AdminRoleFilter;
+import com.anabol.onlineshop.web.filters.UserRoleFilter;
 import com.anabol.onlineshop.web.servlets.*;
 import com.anabol.onlineshop.web.servlets.product.AddProductServlet;
 import com.anabol.onlineshop.web.servlets.product.DeleteProductServlet;
@@ -34,7 +35,6 @@ public class Main {
         try (FileInputStream in = new FileInputStream("src/main/resources/jdbc.properties")) {
             jdbcProperties.load(in);
         }
-
         DataSource dataSource = createDataSource(jdbcProperties);
 
         // Wiring dao
@@ -53,14 +53,20 @@ public class Main {
 
         // servlets mapping
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.addServlet(new ServletHolder(new ShowProductServlet(productService)), "/");
         context.addServlet(new ServletHolder(new ShowProductServlet(productService)), "/products");
         context.addServlet(new ServletHolder(new AddProductServlet(productService)), "/product/add");
         context.addServlet(new ServletHolder(new EditProductServlet(productService)), "/product/edit/*");
         context.addServlet(new ServletHolder(new DeleteProductServlet(productService)), "/product/delete/*");
         context.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
         context.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
+        context.addServlet(new ServletHolder(new RegistrationServlet(securityService)), "/registration");
 
-        context.addFilter(new FilterHolder(new AuthFilter(securityService)), "/product/*",
+        context.addFilter(new FilterHolder(new UserRoleFilter(securityService)), "/",
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        context.addFilter(new FilterHolder(new UserRoleFilter(securityService)), "/products",
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+        context.addFilter(new FilterHolder(new AdminRoleFilter(securityService)), "/product/*",
                 EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
 
         Server server = new Server(8080);

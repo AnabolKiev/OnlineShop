@@ -14,6 +14,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -23,6 +24,16 @@
                     <td>${product.name}</td>
                     <td>${product.description}</td>
                     <td>${product.price}</td>
+                    <td>
+                        <form action="/product/edit/${product.id}" method="GET">
+                            <input type="submit" class="btn btn-dark" value="Edit">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/product/delete/${product.id}" method="GET">
+                            <input type="submit" class="btn btn-dark" value="Remove">
+                        </form>
+                    </td>
                 </tr>
             </#list>
             </tbody>

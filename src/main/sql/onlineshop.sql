@@ -4,11 +4,13 @@ DROP TABLE IF EXISTS onlinestore.user;
 
 CREATE TABLE onlinestore.user (
   name VARCHAR(30) PRIMARY KEY,
-  password VARCHAR(30),
+  password VARCHAR(76),
+  salt VARCHAR(76),
   role VARCHAR(20)
 );
 
-INSERT INTO onlinestore.user (name, password, role) VALUES ('Anabol', '12345', 'ADMIN');
+INSERT INTO onlinestore.user (name, password, salt, role) VALUES ('Anabol', 'OWfxra2qW5bnpaOLRXyNPbIONlI=', 'UgqCz8+Gl7lr5MqZcmhyFQ==', 'ADMIN');
+UPDATE  user SET role = 'ADMIN' where name = 'Anabol';
 commit;
 
 select * from user;

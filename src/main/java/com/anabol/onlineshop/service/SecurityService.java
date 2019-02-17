@@ -2,6 +2,8 @@ package com.anabol.onlineshop.service;
 
 import com.anabol.onlineshop.web.auth.Session;
 
+import java.security.NoSuchAlgorithmException;
+
 public interface SecurityService {
 
     Session login(String name, String password);
@@ -10,4 +12,5 @@ public interface SecurityService {
 
     void removeByToken(String token);
 
+    boolean register(String login, String password);
 }

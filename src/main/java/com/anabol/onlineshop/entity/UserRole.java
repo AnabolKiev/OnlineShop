@@ -1,7 +1,8 @@
 package com.anabol.onlineshop.entity;
 
 public enum UserRole {
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+    USER("USER");
 
     private final String name;
 

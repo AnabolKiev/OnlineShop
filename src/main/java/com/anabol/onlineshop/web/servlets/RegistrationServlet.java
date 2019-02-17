@@ -1,23 +1,19 @@
 package com.anabol.onlineshop.web.servlets;
 
 import com.anabol.onlineshop.service.SecurityService;
-import com.anabol.onlineshop.web.auth.Session;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginServlet extends HttpServlet {
+public class RegistrationServlet extends HttpServlet {
     private SecurityService securityService;
 
-    public LoginServlet(SecurityService securityService) {
+    public RegistrationServlet(SecurityService securityService) {
         this.securityService = securityService;
     }
 
@@ -25,7 +21,7 @@ public class LoginServlet extends HttpServlet {
                       HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(PageGenerator.instance().getPage("login.html"));
+        response.getWriter().println(PageGenerator.instance().getPage("registration.html"));
     }
 
     @Override
@@ -33,19 +29,15 @@ public class LoginServlet extends HttpServlet {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
-        Session session = securityService.login(login, password);
-        if (session != null) {
-            Cookie cookie = new Cookie("user-token", session.getToken());
-            cookie.setMaxAge((int) LocalDateTime.now().until(session.getExpireDate(), ChronoUnit.SECONDS));
-            response.addCookie(cookie);
-            response.sendRedirect("/products");
+        boolean isUserCreated = securityService.register(login, password);
+        if (isUserCreated) {
+            response.sendRedirect("/login");
         } else {
             Map<String, Object> pageVariables = new HashMap<>();
-            pageVariables.put("message", "Entered credentials are wrong");
+            pageVariables.put("message", "Entered login already exists");
             response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println(PageGenerator.instance().getPage("login.html", pageVariables));
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(PageGenerator.instance().getPage("registration.html", pageVariables));
         }
     }
-
 }
