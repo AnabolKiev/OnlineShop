@@ -13,6 +13,9 @@ import java.util.Map;
 public class RegistrationServlet extends HttpServlet {
     private SecurityService securityService;
 
+    public RegistrationServlet() {
+    }
+
     public RegistrationServlet(SecurityService securityService) {
         this.securityService = securityService;
     }

@@ -15,12 +15,7 @@ import com.anabol.onlineshop.web.servlets.product.DeleteProductServlet;
 import com.anabol.onlineshop.web.servlets.product.EditProductServlet;
 import com.anabol.onlineshop.web.servlets.product.ShowProductServlet;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 
-import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.util.*;
@@ -52,27 +47,27 @@ public class Main {
         securityService.setUserService(userService);
 
         // servlets mapping
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        ServletHolder productsServletHolder = new ServletHolder(new ShowProductServlet(productService, securityService));
-        context.addServlet(productsServletHolder, "/");
-        context.addServlet(productsServletHolder, "/products");
-        context.addServlet(new ServletHolder(new AddProductServlet(productService)), "/product/add");
-        context.addServlet(new ServletHolder(new EditProductServlet(productService)), "/product/edit/*");
-        context.addServlet(new ServletHolder(new DeleteProductServlet(productService)), "/product/delete/*");
-        context.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
-        context.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
-        context.addServlet(new ServletHolder(new RegistrationServlet(securityService)), "/registration");
+//        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        ServletHolder productsServletHolder = new ServletHolder(new ShowProductServlet(productService, securityService));
+//        context.addServlet(productsServletHolder, "/");
+//        context.addServlet(productsServletHolder, "/products");
+//        context.addServlet(new ServletHolder(new AddProductServlet(productService)), "/product/add");
+//        context.addServlet(new ServletHolder(new EditProductServlet(productService)), "/product/edit/*");
+//        context.addServlet(new ServletHolder(new DeleteProductServlet(productService)), "/product/delete/*");
+//        context.addServlet(new ServletHolder(new LoginServlet(securityService)), "/login");
+//        context.addServlet(new ServletHolder(new LogoutServlet(securityService)), "/logout");
+//        context.addServlet(new ServletHolder(new RegistrationServlet(securityService)), "/registration");
 
         // filters
-        FilterHolder userFilterHolder = new FilterHolder(new UserRoleFilter(securityService));
-        context.addFilter(userFilterHolder, "/", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-        context.addFilter(userFilterHolder, "/products", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-        context.addFilter(new FilterHolder(new AdminRoleFilter(securityService)), "/product/*",
-                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
-
-        Server server = new Server(8080);
-        server.setHandler(context);
-        server.start();
+//        FilterHolder userFilterHolder = new FilterHolder(new UserRoleFilter(securityService));
+//        context.addFilter(userFilterHolder, "/", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+//        context.addFilter(userFilterHolder, "/products", EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+//        context.addFilter(new FilterHolder(new AdminRoleFilter(securityService)), "/product/*",
+//                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD));
+//
+//        Server server = new Server(8080);
+//        server.setHandler(context);
+//        server.start();
     }
 
     private static DataSource createDataSource(Properties properties) {
