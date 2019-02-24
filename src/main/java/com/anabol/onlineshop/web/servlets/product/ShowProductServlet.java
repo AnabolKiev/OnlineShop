@@ -3,6 +3,7 @@ package com.anabol.onlineshop.web.servlets.product;
 import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.ProductService;
 import com.anabol.onlineshop.service.SecurityService;
+import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.auth.Session;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
@@ -15,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShowProductServlet extends HttpServlet {
-    private ProductService productService;
-    private SecurityService securityService;
+    private ProductService productService = ServiceLocator.getService(ProductService.class);
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+
+    public ShowProductServlet() {
+    }
 
     public ShowProductServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;

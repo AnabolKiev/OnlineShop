@@ -60,10 +60,12 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public Session findByToken(String token) {
-        for (Session session : sessions) {
+        Iterator<Session> iterator = sessions.iterator();
+        while (iterator.hasNext()) {
+            Session session = iterator.next();
             if (session.getToken().equals(token)) {
                 if (session.getExpireDate().isBefore(LocalDateTime.now())) {
-                    sessions.remove(session);
+                    iterator.remove();
                     return null;
                 }
                 return session;

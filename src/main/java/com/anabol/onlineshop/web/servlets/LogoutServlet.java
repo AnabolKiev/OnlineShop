@@ -1,6 +1,7 @@
 package com.anabol.onlineshop.web.servlets;
 
 import com.anabol.onlineshop.service.SecurityService;
+import com.anabol.onlineshop.web.ServiceLocator;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +11,10 @@ import java.io.IOException;
 
 public class LogoutServlet extends HttpServlet {
 
-    private SecurityService securityService;
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+
+    public LogoutServlet() {
+    }
 
     public LogoutServlet(SecurityService securityService) {
         this.securityService = securityService;

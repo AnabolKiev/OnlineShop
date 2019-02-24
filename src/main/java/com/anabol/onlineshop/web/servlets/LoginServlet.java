@@ -1,6 +1,7 @@
 package com.anabol.onlineshop.web.servlets;
 
 import com.anabol.onlineshop.service.SecurityService;
+import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.auth.Session;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,7 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginServlet extends HttpServlet {
-    private SecurityService securityService;
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+
+    public LoginServlet() {
+    }
 
     public LoginServlet(SecurityService securityService) {
         this.securityService = securityService;

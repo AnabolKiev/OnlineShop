@@ -2,6 +2,7 @@ package com.anabol.onlineshop.web.filters;
 
 import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
+import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.auth.Session;
 
 import javax.servlet.*;
@@ -12,7 +13,10 @@ import java.io.IOException;
 
 public class AdminRoleFilter implements Filter {
 
-    private SecurityService securityService;
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+
+    public AdminRoleFilter() {
+    }
 
     public AdminRoleFilter(SecurityService securityService) {
         this.securityService = securityService;
