@@ -10,7 +10,6 @@ import com.anabol.onlineshop.service.UserService;
 import com.anabol.onlineshop.service.impl.DefaultProductService;
 import com.anabol.onlineshop.service.impl.DefaultSecurityService;
 import com.anabol.onlineshop.service.impl.DefaultUserService;
-import com.anabol.onlineshop.web.filters.UserRoleFilter;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
 import javax.sql.DataSource;

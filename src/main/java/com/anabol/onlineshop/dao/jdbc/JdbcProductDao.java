@@ -4,6 +4,7 @@ import com.anabol.onlineshop.dao.ProductDao;
 import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.dao.jdbc.mapper.ProductMapper;
 import com.anabol.onlineshop.entity.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -19,7 +20,11 @@ public class JdbcProductDao implements ProductDao {
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
     private static final String UPDATE_QUERY = "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?";
 
+    @Autowired
     private DataSource dataSource;
+
+    public JdbcProductDao() {
+    }
 
     public JdbcProductDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -110,5 +115,9 @@ public class JdbcProductDao implements ProductDao {
         preparedStatement.setString(1, product.getName());
         preparedStatement.setString(2, product.getDescription());
         preparedStatement.setDouble(3, product.getPrice());
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

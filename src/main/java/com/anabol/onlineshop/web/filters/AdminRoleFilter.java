@@ -2,8 +2,10 @@ package com.anabol.onlineshop.web.filters;
 
 import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
-import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.auth.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -11,21 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AdminRoleFilter implements Filter {
+@Component
+public class AdminRoleFilter extends GenericFilterBean {
 
-    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+    @Autowired
+    private SecurityService securityService;
 
-    public AdminRoleFilter() {
-    }
-
-    public AdminRoleFilter(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -55,9 +48,8 @@ public class AdminRoleFilter implements Filter {
         }
     }
 
-    @Override
-    public void destroy() {
-
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
 }

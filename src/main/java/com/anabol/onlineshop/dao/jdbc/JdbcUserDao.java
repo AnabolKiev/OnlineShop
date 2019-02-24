@@ -15,6 +15,9 @@ public class JdbcUserDao implements UserDao {
 
     private DataSource dataSource;
 
+    public JdbcUserDao() {
+    }
+
     public JdbcUserDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -53,6 +56,10 @@ public class JdbcUserDao implements UserDao {
             e.printStackTrace();
             throw new RuntimeException("We got SQLException", e);
         }
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
 }
