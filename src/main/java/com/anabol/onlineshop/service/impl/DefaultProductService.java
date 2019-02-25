@@ -3,11 +3,13 @@ package com.anabol.onlineshop.service.impl;
 import com.anabol.onlineshop.dao.ProductDao;
 import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class DefaultProductService implements ProductService{
-
+    @Autowired
     private ProductDao productDao;
 
     @Override

@@ -1,7 +1,6 @@
 package com.anabol.onlineshop.web.filters;
 
 import com.anabol.onlineshop.service.SecurityService;
-import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.auth.Session;
 
 import javax.servlet.*;
@@ -12,8 +11,7 @@ import java.io.IOException;
 
 public class UserRoleFilter implements Filter {
 
-    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
-
+    private SecurityService securityService;
     public UserRoleFilter() {
     }
 

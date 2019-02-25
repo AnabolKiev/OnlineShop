@@ -1,7 +1,6 @@
 package com.anabol.onlineshop.web.servlets;
 
 import com.anabol.onlineshop.service.SecurityService;
-import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrationServlet extends HttpServlet {
-    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+    private SecurityService securityService;
 
     public RegistrationServlet() {
     }

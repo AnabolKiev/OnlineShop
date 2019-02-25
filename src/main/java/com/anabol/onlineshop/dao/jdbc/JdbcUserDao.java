@@ -1,26 +1,22 @@
 package com.anabol.onlineshop.dao.jdbc;
 
 import com.anabol.onlineshop.dao.UserDao;
-import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.dao.jdbc.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 
+@Repository
 public class JdbcUserDao implements UserDao {
     private static final UserMapper USER_MAPPER = new UserMapper();
     private static final String FIND_BY_NAME_QUERY = "SELECT name, password, salt, role FROM user WHERE name = ?";
     private static final String INSERT_QUERY = "INSERT INTO user (name, password, salt, role) VALUES (?, ?, ?, ?)";
 
+    @Autowired
     private DataSource dataSource;
-
-    public JdbcUserDao() {
-    }
-
-    public JdbcUserDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public User getByName(String name) {

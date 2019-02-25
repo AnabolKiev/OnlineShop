@@ -10,32 +10,14 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-    <context:component-scan base-package="com.anabol.onlineshop.web"/>
+    <context:component-scan base-package="com.anabol.onlineshop"/>
     <mvc:annotation-driven/>
 
 
-    <bean id="dataSourceBean" class="com.mysql.cj.jdbc.MysqlConnectionPoolDataSource">
-        <property name="url" value="jdbc:mysql://localhost:3306/onlinestore"/>
-        <property name="user" value="root"/>
-        <property name="password" value="root"/>
-    </bean>
-
-
-    <bean id="productDaoBean" class="com.anabol.onlineshop.dao.jdbc.JdbcProductDao">
-        <property name="dataSource" ref="dataSourceBean"/>
-    </bean>
-    <bean id="userDaoBean" class="com.anabol.onlineshop.dao.jdbc.JdbcUserDao">
-        <property name="dataSource" ref="dataSourceBean"/>
-    </bean>
-
-    <bean id="productServiceBean" class="com.anabol.onlineshop.service.impl.DefaultProductService">
-        <property name="productDao" ref="productDaoBean"/>
-    </bean>
-    <bean id="userServiceBean" class="com.anabol.onlineshop.service.impl.DefaultUserService">
-        <property name="userDao" ref="userDaoBean"/>
-    </bean>
-    <bean id="securityServiceBean" class="com.anabol.onlineshop.service.impl.DefaultSecurityService">
-        <property name="userService" ref="userServiceBean"/>
+    <bean id="dataSource" class="com.mysql.cj.jdbc.MysqlConnectionPoolDataSource">
+    <property name="url" value="jdbc:mysql://localhost:3306/onlinestore"/>
+    <property name="user" value="root"/>
+    <property name="password" value="root"/>
     </bean>
 
 </beans>

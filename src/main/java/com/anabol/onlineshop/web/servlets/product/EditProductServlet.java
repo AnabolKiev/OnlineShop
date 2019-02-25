@@ -3,7 +3,6 @@ package com.anabol.onlineshop.web.servlets.product;
 import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.service.ProductService;
 
-import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditProductServlet extends HttpServlet {
-    private ProductService productService = ServiceLocator.getService(ProductService.class);
+    private ProductService productService;
 
     public EditProductServlet() {
     }

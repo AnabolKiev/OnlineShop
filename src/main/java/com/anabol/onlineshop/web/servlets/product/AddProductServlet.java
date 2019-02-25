@@ -2,8 +2,6 @@ package com.anabol.onlineshop.web.servlets.product;
 
 import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.service.ProductService;
-import com.anabol.onlineshop.service.SecurityService;
-import com.anabol.onlineshop.web.ServiceLocator;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -12,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddProductServlet extends HttpServlet {
-    private ProductService productService = ServiceLocator.getService(ProductService.class);
+    private ProductService productService;
 
     public AddProductServlet() {
     }

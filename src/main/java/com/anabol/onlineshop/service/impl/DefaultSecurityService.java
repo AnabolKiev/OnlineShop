@@ -5,18 +5,21 @@ import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.service.UserService;
 import com.anabol.onlineshop.web.auth.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
-
+@Service
 public class DefaultSecurityService implements SecurityService {
     private static final int SESSION_LENGTH_HOURS = 12;
     private static final String ENCRYPTION_ALGORITHM = "SHA-1";
 
     private List<Session> sessions = Collections.synchronizedList(new ArrayList<>());
+    @Autowired
     private UserService userService;
 
     @Override

@@ -1,16 +1,16 @@
 package com.anabol.onlineshop.dao.jdbc;
 
 import com.anabol.onlineshop.dao.ProductDao;
-import com.anabol.onlineshop.dao.jdbc.connection.DBConnectionFactory;
 import com.anabol.onlineshop.dao.jdbc.mapper.ProductMapper;
 import com.anabol.onlineshop.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 public class JdbcProductDao implements ProductDao {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
     private static final String FIND_ALL_QUERY = "SELECT id, name, description, price FROM product";
@@ -22,13 +22,6 @@ public class JdbcProductDao implements ProductDao {
 
     @Autowired
     private DataSource dataSource;
-
-    public JdbcProductDao() {
-    }
-
-    public JdbcProductDao(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public List<Product> findAll() {
