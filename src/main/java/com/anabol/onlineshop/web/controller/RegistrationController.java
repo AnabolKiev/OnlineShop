@@ -4,6 +4,7 @@ import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,22 +19,18 @@ public class RegistrationController {
     private SecurityService securityService;
 
     @GetMapping
-    @ResponseBody
     public String registrationPage() throws IOException {
-        return PageGenerator.instance().getPage("registration.html");
+        return "registration";
     }
 
     @PostMapping
-    protected void registerUser(@RequestParam String login, @RequestParam String password, HttpServletResponse response) throws IOException {
+    protected String registerUser(@RequestParam String login, @RequestParam String password, ModelMap modelMap) throws IOException {
         boolean isUserCreated = securityService.register(login, password);
         if (isUserCreated) {
-            response.sendRedirect("/login");
+            return "redirect:/login";
         } else {
-            Map<String, Object> pageVariables = new HashMap<>();
-            pageVariables.put("message", "Entered login already exists");
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(PageGenerator.instance().getPage("registration.html", pageVariables));
+            modelMap.put("message", "Entered login already exists");
+            return "registration";
         }
     }
 

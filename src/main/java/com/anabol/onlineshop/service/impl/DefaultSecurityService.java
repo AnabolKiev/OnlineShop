@@ -29,7 +29,6 @@ public class DefaultSecurityService implements SecurityService {
             byte[] salt = org.apache.commons.codec.binary.Base64.decodeBase64(user.getSalt());
             byte[] hash = getHash(password, salt);
             byte[] dbHash = org.apache.commons.codec.binary.Base64.decodeBase64(user.getPassword());
-
             if (MessageDigest.isEqual(dbHash, hash)) {  // Authentication
                 Session session = new Session();
                 String token = UUID.randomUUID().toString();

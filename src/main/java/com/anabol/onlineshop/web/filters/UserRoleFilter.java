@@ -2,6 +2,8 @@ package com.anabol.onlineshop.web.filters;
 
 import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.web.auth.Session;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -12,12 +14,6 @@ import java.io.IOException;
 public class UserRoleFilter implements Filter {
 
     private SecurityService securityService;
-    public UserRoleFilter() {
-    }
-
-    public UserRoleFilter(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -26,6 +22,12 @@ public class UserRoleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+       if (securityService == null) {
+            ServletContext servletContext = servletRequest.getServletContext();
+            WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+            securityService = webApplicationContext.getBean(SecurityService.class);
+        }
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 

@@ -8,6 +8,8 @@ import com.anabol.onlineshop.web.auth.Session;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -25,83 +27,60 @@ public class ProductController {
     private SecurityService securityService;
 
     @GetMapping(path = {"/", "/products"})
-    public void getProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("products", productService.findAll());
-        pageVariables.put("isUserRoleAdmin", isUserRoleAdmin(request.getCookies()));
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(PageGenerator.instance().getPage("products.html", pageVariables));
+    public String getProducts(@CookieValue("user-token") String token, ModelMap modelMap) throws IOException {
+        modelMap.put("products", productService.findAll());
+        modelMap.put("isUserRoleAdmin", isUserRoleAdmin(token));
+        return "products";
     }
 
     @GetMapping(path = "/product/add")
-    public void addProduct(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(PageGenerator.instance().getPage("add.html"));
+    public String addProduct() throws IOException {
+        return "add";
     }
 
     @PostMapping(path = "/product/add")
-    public void postProduct(HttpServletRequest request,
-                       HttpServletResponse response) throws IOException {
+    public String postProduct(@RequestParam String name, @RequestParam String description,
+                              @RequestParam String price) throws IOException {
         Product product = new Product();
-        product.setName(request.getParameter("name"));
-        product.setDescription(request.getParameter("description"));
-        product.setPrice(Double.valueOf(request.getParameter("price")));
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(Double.valueOf(price));
         productService.insert(product);
-
-        response.sendRedirect(request.getContextPath() + "/products");
+        return "redirect:/products";
     }
 
     @GetMapping(path = "/product/delete/{productId}")
-    public void deleteProduct(@PathVariable int productId, HttpServletResponse response) throws IOException {
+    public String deleteProduct(@PathVariable int productId) throws IOException {
         productService.deleteById(productId);
-        response.sendRedirect("/products");
+        return "redirect:/products";
     }
 
     @GetMapping(path = "/product/edit/{productId}")
-    public void editProduct(@PathVariable int productId, HttpServletResponse response) throws IOException {
+    public String editProduct(@PathVariable int productId, ModelMap modelMap) throws IOException {
         Product product = productService.findById(productId);
         if (product != null) { // specified product was found
-            Map<String, Object> pageVariables = new HashMap<>();
-            pageVariables.put("product", product);
-
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(PageGenerator.instance().getPage("edit.html", pageVariables));
+            modelMap.put("product", product);
+            return "edit";
         } else {
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                response.getWriter().println(PageGenerator.instance().getPage("edit.html", pageVariables));
+            return "404";
         }
     }
 
     @PostMapping(path = "/product/edit")
-    public void postEditedProduct(HttpServletRequest request,
-                       HttpServletResponse response) throws IOException {
+    public String postEditedProduct(@RequestParam int id, @RequestParam String name, @RequestParam String description,
+                                  @RequestParam double price) throws IOException {
         Product product = new Product();
-        product.setId(Integer.parseInt(request.getParameter("id")));
-        product.setName(request.getParameter("name"));
-        product.setDescription(request.getParameter("description"));
-        product.setPrice(Double.valueOf(request.getParameter("price")));
+        product.setId(id);
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
         productService.update(product);
-
-        response.sendRedirect("/products");
+        return "redirect:/products";
     }
 
-    private boolean isUserRoleAdmin(Cookie[] cookies) {
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("user-token".equals(cookie.getName())) {
-                    Session session = securityService.findByToken(cookie.getValue());
-                    if (session != null && UserRole.ADMIN == session.getUserRole()) {
-                        return true;
-                    }
-                    break;
-                }
-            }
-        }
-        return false;
+    private boolean isUserRoleAdmin(String token) {
+        Session session = securityService.findByToken(token);
+        return session != null && UserRole.ADMIN == session.getUserRole();
     }
 
     public void setProductService(ProductService productService) {

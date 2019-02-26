@@ -5,6 +5,7 @@ import com.anabol.onlineshop.web.auth.Session;
 import com.anabol.onlineshop.web.templater.PageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -22,31 +23,27 @@ public class LoginController {
     private SecurityService securityService;
 
     @GetMapping(path = "/login")
-    public void loginPage(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(PageGenerator.instance().getPage("login.html"));
+    public String loginPage(HttpServletResponse response) throws IOException {
+        return "login";
     }
 
     @PostMapping(path = "/login")
-    protected void login(@RequestParam String login, @RequestParam String password, HttpServletResponse response) throws IOException {
+    protected String login(@RequestParam String login, @RequestParam String password, ModelMap modelMap,
+                           HttpServletResponse response) throws IOException {
         Session session = securityService.login(login, password);
         if (session != null) {
             Cookie cookie = new Cookie("user-token", session.getToken());
             cookie.setMaxAge((int) LocalDateTime.now().until(session.getExpireDate(), ChronoUnit.SECONDS));
             response.addCookie(cookie);
-            response.sendRedirect("/products");
+            return "redirect:/products";
         } else {
-            Map<String, Object> pageVariables = new HashMap<>();
-            pageVariables.put("message", "Entered credentials are wrong");
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println(PageGenerator.instance().getPage("login.html", pageVariables));
+            modelMap.put("message", "Entered credentials are wrong");
+            return "login";
         }
     }
 
     @GetMapping(path = "/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -57,7 +54,7 @@ public class LoginController {
                 }
             }
         }
-        response.sendRedirect("/login");
+        return "redirect:/login";
     }
 
     public void setSecurityService(SecurityService securityService) {
