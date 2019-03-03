@@ -4,58 +4,41 @@ import com.anabol.onlineshop.dao.UserDao;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.dao.jdbc.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
-import java.sql.*;
 
 @Repository
 public class JdbcUserDao implements UserDao {
     private static final UserMapper USER_MAPPER = new UserMapper();
     private static final String FIND_BY_NAME_QUERY = "SELECT name, password, salt, role FROM user WHERE name = ?";
-    private static final String INSERT_QUERY = "INSERT INTO user (name, password, salt, role) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO user (name, password, salt, role) VALUES (:name, :password, :salt, :role)";
 
     @Autowired
-    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public User getByName(String name) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY)) {
-            preparedStatement.setString(1, name);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                User user = null;
-                if (resultSet.next()) {
-                    user = USER_MAPPER.mapRow(resultSet);
-                }
-                return user;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
+        try {
+            return jdbcTemplate.queryForObject(FIND_BY_NAME_QUERY, USER_MAPPER, name);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 
     @Override
     public void insert(User user) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
-
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getSalt());
-            preparedStatement.setString(4, user.getRole());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("name", user.getName());
+        parameterSource.addValue("password", user.getPassword());
+        parameterSource.addValue("salt", user.getSalt());
+        parameterSource.addValue("role", user.getRole());
+        namedParameterJdbcTemplate.update(INSERT_QUERY, parameterSource);
     }
 
 }

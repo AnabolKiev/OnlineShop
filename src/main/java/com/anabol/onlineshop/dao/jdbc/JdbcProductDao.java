@@ -4,113 +4,60 @@ import com.anabol.onlineshop.dao.ProductDao;
 import com.anabol.onlineshop.dao.jdbc.mapper.ProductMapper;
 import com.anabol.onlineshop.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 @Repository
 public class JdbcProductDao implements ProductDao {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
-    private static final String FIND_ALL_QUERY = "SELECT id, name, description, price FROM product";
-
-    private static final String FIND_BY_ID_QUERY = "SELECT id, name, description, price FROM product WHERE id = ?";
-    private static final String INSERT_QUERY = "INSERT INTO product (name, description, price) VALUES (?, ?, ?)";
-    private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
-    private static final String UPDATE_QUERY = "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?";
 
     @Autowired
-    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private static final String FIND_ALL_QUERY = "SELECT id, name, description, price FROM product";
+    private static final String FIND_BY_ID_QUERY = "SELECT id, name, description, price FROM product WHERE id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO product (name, description, price) VALUES (:name, :description, :price)";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE product SET name = :name, description = :description, price = :price WHERE id = :id";
 
     @Override
     public List<Product> findAll() {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_QUERY);
-             ResultSet resultSet = preparedStatement.executeQuery(FIND_ALL_QUERY)) {
-
-            List<Product> list = new ArrayList<>();
-            while (resultSet.next()) {
-                list.add(PRODUCT_MAPPER.mapRow(resultSet));
-            }
-            return list;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
+        return jdbcTemplate.query(FIND_ALL_QUERY, PRODUCT_MAPPER);
     }
 
     @Override
     public Product findById(int id) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
-
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                Product product = null;
-                if (resultSet.next()) {
-                    product = PRODUCT_MAPPER.mapRow(resultSet);
-                }
-                return product;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
+        return jdbcTemplate.queryForObject(FIND_BY_ID_QUERY, PRODUCT_MAPPER, id);
     }
 
     @Override
     public void insert(Product product) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
-
-            setProductStatementAttributes(preparedStatement, product);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("name", product.getName());
+        parameterSource.addValue("description", product.getDescription());
+        parameterSource.addValue("price", product.getPrice());
+        namedParameterJdbcTemplate.update(INSERT_QUERY, parameterSource);
     }
 
     @Override
     public void deleteById(int id) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_QUERY)) {
-
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
+        jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
     }
 
     @Override
     public void update(Product product) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
-
-            setProductStatementAttributes(preparedStatement, product);
-            preparedStatement.setInt(4, product.getId());
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("We got SQLException", e);
-        }
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("name", product.getName());
+        parameterSource.addValue("description", product.getDescription());
+        parameterSource.addValue("price", product.getPrice());
+        parameterSource.addValue("id", product.getId());
+        namedParameterJdbcTemplate.update(UPDATE_QUERY, parameterSource);
     }
 
-    private void setProductStatementAttributes(PreparedStatement preparedStatement, Product product) throws SQLException {
-        preparedStatement.setString(1, product.getName());
-        preparedStatement.setString(2, product.getDescription());
-        preparedStatement.setDouble(3, product.getPrice());
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 }
