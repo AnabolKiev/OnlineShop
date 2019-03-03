@@ -27,9 +27,9 @@ public class ProductController {
     private SecurityService securityService;
 
     @GetMapping(path = {"/", "/products"})
-    public String getProducts(@CookieValue("user-token") String token, ModelMap modelMap) throws IOException {
+    public String getProducts(@RequestAttribute Session session, ModelMap modelMap) throws IOException {
         modelMap.put("products", productService.findAll());
-        modelMap.put("isUserRoleAdmin", isUserRoleAdmin(token));
+        modelMap.put("isUserRoleAdmin", UserRole.ADMIN == session.getUserRole());
         return "products";
     }
 
@@ -76,11 +76,6 @@ public class ProductController {
         product.setPrice(price);
         productService.update(product);
         return "redirect:/products";
-    }
-
-    private boolean isUserRoleAdmin(String token) {
-        Session session = securityService.findByToken(token);
-        return session != null && UserRole.ADMIN == session.getUserRole();
     }
 
     public void setProductService(ProductService productService) {

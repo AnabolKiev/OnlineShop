@@ -36,6 +36,7 @@ abstract class RoleFilter implements Filter {
                     if (session != null) {
                         if (isValidRole(session.getUserRole())) {
                             isAuth = true;
+                            servletRequest.setAttribute("session", session);
                         }
                     }
                     break;
