@@ -15,8 +15,12 @@ import java.util.Map;
 @Controller
 @RequestMapping(path = "/registration")
 public class RegistrationController {
+    private final SecurityService securityService;
+
     @Autowired
-    private SecurityService securityService;
+    public RegistrationController(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @GetMapping
     public String registrationPage() throws IOException {
@@ -34,7 +38,4 @@ public class RegistrationController {
         }
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

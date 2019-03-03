@@ -21,8 +21,12 @@ public class DefaultSecurityService implements SecurityService {
     private static final String ENCRYPTION_ALGORITHM = "SHA-1";
 
     private List<Session> sessions = Collections.synchronizedList(new ArrayList<>());
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public DefaultSecurityService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Session login(String login, String password) {
@@ -125,10 +129,6 @@ public class DefaultSecurityService implements SecurityService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Can't encrypt password", e);
         }
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
     }
 
     public UserService getUserService() {

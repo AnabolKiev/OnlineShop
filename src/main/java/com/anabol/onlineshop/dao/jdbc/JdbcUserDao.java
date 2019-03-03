@@ -16,11 +16,15 @@ public class JdbcUserDao implements UserDao {
     private static final String FIND_BY_NAME_QUERY = "SELECT name, password, salt, role FROM user WHERE name = ?";
     private static final String INSERT_QUERY = "INSERT INTO user (name, password, salt, role) VALUES (:name, :password, :salt, :role)";
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    public JdbcUserDao(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public User getByName(String name) {

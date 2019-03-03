@@ -13,8 +13,12 @@ import java.io.IOException;
 
 @Controller
 public class ProductController {
+    private final ProductService productService;
+
     @Autowired
-    private ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping(path = {"/", "/products"})
     public String getProducts(@RequestAttribute Session session, ModelMap modelMap) throws IOException {
@@ -66,10 +70,6 @@ public class ProductController {
         product.setPrice(price);
         productService.update(product);
         return "redirect:/products";
-    }
-
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
     }
 
 }

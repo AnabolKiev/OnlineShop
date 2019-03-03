@@ -14,17 +14,21 @@ import java.util.List;
 public class JdbcProductDao implements ProductDao {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String FIND_ALL_QUERY = "SELECT id, name, description, price FROM product";
     private static final String FIND_BY_ID_QUERY = "SELECT id, name, description, price FROM product WHERE id = ?";
     private static final String INSERT_QUERY = "INSERT INTO product (name, description, price) VALUES (:name, :description, :price)";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
     private static final String UPDATE_QUERY = "UPDATE product SET name = :name, description = :description, price = :price WHERE id = :id";
+
+    @Autowired
+    public JdbcProductDao(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     @Override
     public List<Product> findAll() {

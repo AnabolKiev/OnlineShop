@@ -19,8 +19,12 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
+    private final SecurityService securityService;
+
     @Autowired
-    private SecurityService securityService;
+    public LoginController(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @GetMapping(path = "/login")
     public String loginPage(HttpServletResponse response) throws IOException {
@@ -57,7 +61,4 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

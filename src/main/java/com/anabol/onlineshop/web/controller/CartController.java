@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/cart")
 public class CartController {
+    final ProductService productService;
+
     @Autowired
-    ProductService productService;
+    public CartController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @PostMapping("/{productId}")
     public String addToCart(@PathVariable int productId, @RequestAttribute Session session) {
@@ -40,7 +44,4 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
-    }
 }

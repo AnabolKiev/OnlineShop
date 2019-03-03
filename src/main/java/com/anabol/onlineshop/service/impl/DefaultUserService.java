@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultUserService implements UserService{
+    private final UserDao userDao;
+
     @Autowired
-    private UserDao userDao;
+    public DefaultUserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public User getByName(String name) {
@@ -21,7 +25,4 @@ public class DefaultUserService implements UserService{
         userDao.insert(user);
     }
 
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
 }

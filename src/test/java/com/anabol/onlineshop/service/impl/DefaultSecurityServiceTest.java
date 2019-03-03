@@ -11,7 +11,7 @@ public class DefaultSecurityServiceTest {
 
     @Before
     public void before() {
-        securityService = new DefaultSecurityService();
+        securityService = new DefaultSecurityService(null);
     }
 
     @Test

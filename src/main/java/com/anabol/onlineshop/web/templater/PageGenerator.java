@@ -1,6 +1,5 @@
 package com.anabol.onlineshop.web.templater;
 
-import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
