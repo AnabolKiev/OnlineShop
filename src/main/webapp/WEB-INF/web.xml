@@ -45,5 +45,9 @@
         <filter-name>userRoleFilter</filter-name>
         <url-pattern>/products</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>userRoleFilter</filter-name>
+        <url-pattern>/cart/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

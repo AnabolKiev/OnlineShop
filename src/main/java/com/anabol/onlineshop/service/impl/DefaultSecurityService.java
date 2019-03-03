@@ -1,5 +1,6 @@
 package com.anabol.onlineshop.service.impl;
 
+import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.SecurityService;
@@ -13,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
+
 @Service
 public class DefaultSecurityService implements SecurityService {
     private static final int SESSION_LENGTH_HOURS = 12;
@@ -30,13 +32,17 @@ public class DefaultSecurityService implements SecurityService {
             byte[] hash = getHash(password, salt);
             byte[] dbHash = org.apache.commons.codec.binary.Base64.decodeBase64(user.getPassword());
             if (MessageDigest.isEqual(dbHash, hash)) {  // Authentication
-                Session session = new Session();
-                String token = UUID.randomUUID().toString();
-                session.setToken(token);
-                session.setUser(user);
-                session.setUserRole(UserRole.getByName(user.getRole()));
-                session.setExpireDate(LocalDateTime.now().plusHours(SESSION_LENGTH_HOURS));
-                sessions.add(session);
+                Session session = findByUserName(login);
+                if (session == null) { // create new session
+                    session = new Session();
+                    String token = UUID.randomUUID().toString();
+                    session.setToken(token);
+                    session.setUser(user);
+                    session.setUserRole(UserRole.getByName(user.getRole()));
+                    session.setExpireDate(LocalDateTime.now().plusHours(SESSION_LENGTH_HOURS));
+                    session.setCart(new HashMap<>());
+                    sessions.add(session);
+                }
                 return session;
             }
         }
@@ -66,6 +72,22 @@ public class DefaultSecurityService implements SecurityService {
         while (iterator.hasNext()) {
             Session session = iterator.next();
             if (session.getToken().equals(token)) {
+                if (session.getExpireDate().isBefore(LocalDateTime.now())) {
+                    iterator.remove();
+                    return null;
+                }
+                return session;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Session findByUserName(String login) {
+        Iterator<Session> iterator = sessions.iterator();
+        while (iterator.hasNext()) {
+            Session session = iterator.next();
+            if (session.getUser().getName().equals(login)) {
                 if (session.getExpireDate().isBefore(LocalDateTime.now())) {
                     iterator.remove();
                     return null;

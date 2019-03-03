@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+<body>
+<#include "common/navbar.html">
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col">Count</th>
+            <th/>
+        </tr>
+        </thead>
+        <tbody>
+        <#list cart as productId, cartElement>
+            <tr>
+                <td>${productId?index+1}</td>
+                <td>${productId}</td>
+                <td>${cartElement.product.name}</td>
+                <td>${cartElement.product.description}</td>
+                <td>${cartElement.product.price}</td>
+                <td>${cartElement.count}</td>
+                <td>
+                    <form action="/cart/delete/${productId}" method="GET">
+                        <input type="submit" class="btn btn-dark" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</body>
+</html>

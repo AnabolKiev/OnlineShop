@@ -10,6 +10,8 @@ public interface SecurityService {
 
     Session findByToken(String token);
 
+    Session findByUserName(String login);
+
     void removeByToken(String token);
 
     boolean register(String login, String password);

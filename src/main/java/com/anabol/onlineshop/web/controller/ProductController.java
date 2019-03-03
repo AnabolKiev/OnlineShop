@@ -3,28 +3,18 @@ package com.anabol.onlineshop.web.controller;
 import com.anabol.onlineshop.entity.Product;
 import com.anabol.onlineshop.entity.UserRole;
 import com.anabol.onlineshop.service.ProductService;
-import com.anabol.onlineshop.service.SecurityService;
 import com.anabol.onlineshop.web.auth.Session;
-import com.anabol.onlineshop.web.templater.PageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class ProductController {
     @Autowired
     private ProductService productService;
-    @Autowired
-    private SecurityService securityService;
 
     @GetMapping(path = {"/", "/products"})
     public String getProducts(@RequestAttribute Session session, ModelMap modelMap) throws IOException {
@@ -68,7 +58,7 @@ public class ProductController {
 
     @PostMapping(path = "/product/edit")
     public String postEditedProduct(@RequestParam int id, @RequestParam String name, @RequestParam String description,
-                                  @RequestParam double price) throws IOException {
+                                    @RequestParam double price) throws IOException {
         Product product = new Product();
         product.setId(id);
         product.setName(name);
@@ -82,7 +72,4 @@ public class ProductController {
         this.productService = productService;
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

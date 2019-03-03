@@ -1,46 +1,22 @@
 package com.anabol.onlineshop.web.auth;
 
+import com.anabol.onlineshop.entity.CartElement;
 import com.anabol.onlineshop.entity.User;
 import com.anabol.onlineshop.entity.UserRole;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
+@Getter
+@Setter
 public class Session {
 
     private String token;
     private User user;
     private UserRole userRole;
     private LocalDateTime expireDate;
+    private Map<Integer, CartElement> cart;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    public LocalDateTime getExpireDate() {
-        return expireDate;
-    }
-
-    public void setExpireDate(LocalDateTime expireDate) {
-        this.expireDate = expireDate;
-    }
 }
